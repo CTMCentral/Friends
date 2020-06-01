@@ -1,0 +1,11 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/CTMCentral/FriendsList
+projects:
+  FriendsList:
+    path: ""
+    icon: icon.png
+    lint:
+      phpstan: false
+    libs:
+      - src: Cosmoverse/Forms/Forms
+        version: ^0.0.1
+...
