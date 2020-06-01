@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace CTMCentral\FriendsList;
 
-use jasonwynn10\HubTools\Main;
 use pocketmine\event\Listener;
 
 class EventListener implements Listener {

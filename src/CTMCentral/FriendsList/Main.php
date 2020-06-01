@@ -18,9 +18,13 @@ class Main extends PluginBase {
 
 	public function onLoad() {
 		self::$instance = $this;
+
+		$this->saveDefaultConfig();
+
+		new CommandExecutor($this);
 	}
 
 	public function onEnable() {
-		// TODO
+		new EventListener($this);
 	}
 }
