@@ -4,8 +4,6 @@ projects:
     type: library
     path: ""
     icon: icon.png
-    lint:
-      phpstan: false
     libs:
       - src: poggit/libasynql/libasynql
         version: ^3.4.0
