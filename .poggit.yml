@@ -6,6 +6,6 @@ projects:
     lint:
       phpstan: false
     libs:
-      - src: Cosmoverse/Forms/Forms
-        version: ^0.0.1
+      - src: poggit/libasynql/libasynql
+        version: ^3.4.0
 ...
