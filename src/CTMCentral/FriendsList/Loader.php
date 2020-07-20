@@ -17,7 +17,7 @@ class Loader extends PluginBase{
 		$this->db = libasynql::create($this,$this->getConfig()->get("database"), [
 			"mysql" => "mysql.sql"
 		]);
-		$this->db->executeGeneric("CTMCentral.friends.init");
+		$this->db->executeGeneric("friends.init");
 	}
 
 	public function onDisable(){
