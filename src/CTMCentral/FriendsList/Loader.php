@@ -9,10 +9,10 @@ use poggit\libasynql\libasynql;
 
 class Loader extends PluginBase{
 
-	/**
+	/**w
 	 * @var DataConnector
 	 */
-	private $db;
+	public $db;
 
 	public function onEnable() :void {
 		$this->db = libasynql::create($this,$this->getConfig()->get("database"), [

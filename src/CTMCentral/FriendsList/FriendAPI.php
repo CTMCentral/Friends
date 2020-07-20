@@ -9,7 +9,7 @@ class FriendAPI {
 	public static function addFriend(String $username, String $friendsname) :bool {
 		$server = Server::getInstance();
 
-		if ($server->getPlayer($username) === null) {
+		if ($server->getPlayer($friendsname) === null) {
 			throw new FriendOfflineException();
 		}
 
