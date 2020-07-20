@@ -19,6 +19,7 @@ class Loader extends PluginBase{
 			"mysql" => "mysql.sql"
 		]);
 		$this->db->executeGeneric("friends.init");
+		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getServer()->getCommandMap()->register("friends", new FriendCommand($this, "friend", "Command used to show friends GUI", ["f"]));
 	}
 

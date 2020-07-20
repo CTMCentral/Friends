@@ -11,6 +11,9 @@ use pocketmine\utils\TextFormat;
 class AddSubCommand extends BaseSubCommand {
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void{
+		if ($sender->getName() === $args[0]) {
+			$sender->sendMessage("Thats sad, you're your only friend :(");
+		}
 		try {
 			FriendAPI::addFriend($sender->getName(),$args[0]);
 		}catch(FriendOfflineException $exception) {
