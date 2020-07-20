@@ -2,8 +2,6 @@
 build-by-default: true
 projects:
   FriendsList:
-    type: library
-    model: virion
     path: ""
     libs:
       - src: poggit/libasynql/libasynql
