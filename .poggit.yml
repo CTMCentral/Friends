@@ -10,6 +10,4 @@ projects:
         version: ^3.4.0
       - src: DaPigGuy/Commando-4.0.0/Commando
           version: ^2.1.0
-      - src: Cosmoverse/Forms/Forms
-        version: ^0.0.1
 ...
