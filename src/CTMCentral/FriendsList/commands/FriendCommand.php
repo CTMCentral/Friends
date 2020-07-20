@@ -3,6 +3,8 @@
 namespace CTMCentral\FriendsList\commands;
 
 use CortexPE\Commando\BaseCommand;
+use CTMCentral\FriendsList\commands\subcommands\AddSubCommand;
+use jasonwynn10\HubTools\Main;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginOwned;
@@ -15,10 +17,10 @@ class FriendCommand extends BaseCommand implements PluginOwned {
 			$sender->sendMessage(TF::RED . "You can only run this command in game");
 			return;
 		}
-
+		Main::sendFriendsAndPartyForm($sender);
 	}
 
 	protected function prepare(): void{
-		// TODO: Implement prepare() method.
+		$this->registerSubCommand(new AddSubCommand($this->getPlugin(), "add", "Add a friend"));
 	}
 }
