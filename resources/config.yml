@@ -1,6 +1,4 @@
 database:
-  # The database type. "sqlite" and "mysql" are supported.
-  type: mysql
   # Edit these settings only if you choose "mysql".
   mysql:
     host: 172.96.143.210
@@ -9,5 +7,3 @@ database:
     password: "Eylyfdg@fL.K0t!obgy9Az31"
     schema: s1419_ctmcentral
   # The maximum number of simultaneous SQL queries
-  # Recommended: 1 for sqlite, 2 for MySQL. You may want to further increase this value if your MySQL connection is very slow.
-  worker-limit: 2

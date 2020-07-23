@@ -6,6 +6,4 @@ projects:
     libs:
       - src: DaPigGuy/Commando-4.0.0/Commando
         version: ^2.1.0
-      - src: DaPigGuy/libasynql/libasynql
-        version: ^3.3.1
 ...

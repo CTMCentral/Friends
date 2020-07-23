@@ -2,6 +2,7 @@
 
 namespace CTMCentral\FriendsList;
 
+use CTMCentral\FriendsList\mysql\Database;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 
@@ -17,10 +18,12 @@ class EventListener implements Listener {
 	}
 
 	public function onJoin(PlayerLoginEvent $event) {
-		if ($event->getPlayer()->hasPlayedBefore()) return;
-		$this->getOwner()->db->executeInsert("friends.player.init", [
-			"username" => $event->getPlayer()->getName(),
-			"enabled" => true
+		$player = $event->getPlayer();
+		if ($player->hasPlayedBefore()) return;
+		Database::queryAsync("REPLACE INTO friends(username, enabled) VALUES (:username, :enabled);",
+		[
+			":username" => $player->getName(),
+			":enabled" => true
 		]);
 	}
 	public function getOwner(): Loader {
