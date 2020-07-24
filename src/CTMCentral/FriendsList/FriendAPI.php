@@ -30,4 +30,7 @@ class FriendAPI {
 			return true;
 		}
 	}
+	public static function removeFriend(String $username, String $friendname) :void {
+
+	}
 }

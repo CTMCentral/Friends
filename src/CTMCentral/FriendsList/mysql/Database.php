@@ -27,7 +27,7 @@ class Database{
 		self::$database = $database = self::getDatabase(self::$credentials, true);
 		$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$database->exec("CREATE TABLE IF NOT EXISTS friends(username TEXT NOT NULL, friendlist TEXT, enabled BOOL);");
+		$database->exec("CREATE TABLE IF NOT EXISTS friends(username TEXT NOT NULL, friendlist TEXT, requestlist TEXT, enabled BOOL NOT NULL);");
 	}
 
 	/**
