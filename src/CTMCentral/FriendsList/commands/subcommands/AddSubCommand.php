@@ -4,6 +4,7 @@ namespace CTMCentral\FriendsList\commands\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
+use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
 use CTMCentral\FriendsList\exceptions\FriendOfflineException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
 use CTMCentral\FriendsList\FriendAPI;
@@ -21,7 +22,7 @@ class AddSubCommand extends BaseSubCommand {
 		}
 		try {
 			FriendAPI::addFriend($sender->getName(), $args["add"]);
-		}catch(FriendOfflineException $exception) {
+		}catch(FriendNotFoundException $exception) {
 			$sender->sendMessage(TextFormat::RED . "User is offline, thus your friend request has not been sent.");
 		}catch(FriendUsernameSameException $exception) {
 			$sender->sendMessage("Thats sad, try adding someone else?");
