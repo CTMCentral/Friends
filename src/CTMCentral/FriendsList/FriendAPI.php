@@ -6,6 +6,7 @@ use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
 use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
 use CTMCentral\FriendsList\exceptions\NoFriendsException;
+use CTMCentral\FriendsList\exceptions\NotYourFriendException;
 use CTMCentral\FriendsList\mysql\Database;
 
 class FriendAPI {
@@ -61,6 +62,7 @@ class FriendAPI {
 	 * @throws FriendNotFoundException thrown when user is not found in database
 	 * @throws FriendUsernameSameException thrown when username is the same as the person is ading
 	 * @throws NoFriendsException throws when the user has no friends to remove
+	 * @throws NotYourFriendException throws when user is not in his friendlist
 	 */
 	public static function removeFriend(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
@@ -71,8 +73,11 @@ class FriendAPI {
 		if (empty($queryfriendsname)) {
 			throw new FriendNotFoundException();
 		}
-		$friends = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
 
+		$friends = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
+		if (!array_search($friendsname, $friends[0]["friendlist"])){
+			throw new NotYourFriendException();
+		}
 		if($friends[0]["friendlist"] !== null) {
 			$friendsarray = unserialize($friends[0]["friendlist"]);
 			// ty stackoverflow
