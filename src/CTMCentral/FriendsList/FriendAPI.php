@@ -9,6 +9,13 @@ use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\mysql\Database;
 
 class FriendAPI {
+
+	/**
+	 * @param String $username
+	 * @param String $friendsname
+	 * @throws FriendNotFoundException throws when Friend's username is not found in db
+	 * @throws FriendUsernameSameException throws when friend's username is same as username
+	 */
 	public static function addFriend(String $username, String $friendsname) :void {
 
 		if ($username === $friendsname) {
@@ -47,6 +54,14 @@ class FriendAPI {
 		}
 
 	}
+
+	/**
+	 * @param String $username Username of the player who is removing
+	 * @param String $friendsname Username of the friend who is getting removed
+	 * @throws FriendNotFoundException thrown when user is not found in database
+	 * @throws FriendUsernameSameException thrown when username is the same as the person is ading
+	 * @throws NoFriendsException throws when the user has no friends to remove
+	 */
 	public static function removeFriend(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
@@ -76,6 +91,15 @@ class FriendAPI {
 			}
 			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $friendsname]);
 	}
+
+	/**
+	 * @param String $username Username of the person requesting
+	 * @param String $friendsname Username of the friend he/she is requesting
+	 * @throws FriendNotFoundException throw when Friend username is not found in db
+	 * @throws FriendRequestDisabledException throws when friend request from the user he/she is requesting to is disabled
+	 * @throws FriendUsernameSameException
+	 */
+
 	public static function requestFriend(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
@@ -102,5 +126,16 @@ class FriendAPI {
 			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $username]);
 			return;
 		}
+	}
+
+	/**
+	 * Request List of friends
+	 * @param String $username the username of the player
+	 * @return array returns [] if there is none
+	 */
+	public static function listFriends(String $username) :array {
+		$list = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
+
+		return $list[0];
 	}
 }
