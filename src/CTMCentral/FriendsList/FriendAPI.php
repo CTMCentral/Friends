@@ -3,6 +3,7 @@
 namespace CTMCentral\FriendsList;
 
 use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
+use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
 use CTMCentral\FriendsList\mysql\Database;
 
@@ -76,6 +77,12 @@ class FriendAPI {
 		if (empty($queryfriendsname)) {
 			throw new FriendNotFoundException();
 		}
+
+		$isdisabled = Database::querySync("SELECT enabled FROM friends WHERE username = :username", [":username" => $friendsname]);
+		if ($isdisabled[0]["enabled"] === 0) {
+			throw new FriendRequestDisabledException();
+		}
+
 		$requests = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
 
 		if($requests[0]["requestlist"] === null) {
