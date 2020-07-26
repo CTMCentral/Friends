@@ -5,6 +5,7 @@ namespace CTMCentral\FriendsList;
 use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
 use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
+use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\mysql\Database;
 
 class FriendAPI {
@@ -59,14 +60,21 @@ class FriendAPI {
 
 		if($friends[0]["friendlist"] !== null) {
 			$friendsarray = unserialize($friends[0]["friendlist"]);
-			var_dump($friendsarray);
+			// ty stackoverflow
 			if (($key = array_search($friendsname, $friendsarray)) !== false) {
 				unset($friendsarray[$key]);
 			}
-			unset($friendsarray[$friendsname]);
 			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $username]);
-			return;
+		}else {
+			throw new NoFriendsException();
 		}
+		$frienduser = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $friendsname]);
+			$friendsarray = unserialize($frienduser[0]["friendlist"]);
+			// ty stackoverflow
+			if (($key = array_search($username, $friendsarray)) !== false) {
+				unset($friendsarray[$key]);
+			}
+			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $friendsname]);
 	}
 	public static function requestFriend(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
