@@ -7,6 +7,7 @@ use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
 use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\exceptions\NotYourFriendException;
+use CTMCentral\FriendsList\exceptions\RequestNotFound;
 use CTMCentral\FriendsList\mysql\Database;
 
 class FriendAPI {
@@ -141,6 +142,22 @@ class FriendAPI {
 	public static function listFriends(String $username) :array {
 		$list = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
 
-		return $list[0];
+		return unserialize($list[0]["friendlist"]);
+	}
+
+	/**
+	 * @param String $username Username that is accepting
+	 * @param String $friendname Username that has requested to add friend
+	 */
+	public static function acceptrequest(String $username, String $friendname) :void {
+		$requestlist = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
+		$requestarray = unserialize($requestlist[0]["friendlist"]);
+		if (!array_search($friendname, $requestarray)) {
+			throw new RequestNotFound();
+		}
+
+		if (($key = array_search($username, $requestlist[0]["requestlist"])) !== false) {
+			unset($requestarray[$key]);
+		}
 	}
 }
