@@ -1,9 +1,9 @@
 database:
   # Edit these settings only if you choose "mysql".
   mysql:
-    host: 172.96.143.210
+    host: 0.0.0.0
     # Avoid using the "root" user for security reasons.
-    username: u1419_kVg42rLJGU
-    password: "Eylyfdg@fL.K0t!obgy9Az31"
-    schema: s1419_ctmcentral
+    username: root
+    password: password
+    schema: schema
   # The maximum number of simultaneous SQL queries
