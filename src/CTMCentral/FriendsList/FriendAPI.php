@@ -158,6 +158,24 @@ class FriendAPI {
 
 		if (($key = array_search($username, $requestlist[0]["requestlist"])) !== false) {
 			unset($requestarray[$key]);
+			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($requestarray), ":username" => $username]);
+			self::addFriend($username, $friendname);
 		}
+	}
+	public static function declineRequest(String $username, String $friendsname) :void {
+		$requestlist = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
+		$requestarray = unserialize($requestlist[0]["friendlist"]);
+		if (!array_search($friendsname, $requestarray)) {
+			throw new RequestNotFound();
+		}
+
+		if (($key = array_search($username, $requestlist[0]["requestlist"])) !== false) {
+			unset($requestarray[$key]);
+		}
+	}
+	public static function listRequest(String $username) {
+		$list = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
+
+		return unserialize($list[0]["friendlist"]);
 	}
 }

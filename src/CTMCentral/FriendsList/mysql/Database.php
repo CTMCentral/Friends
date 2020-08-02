@@ -5,6 +5,7 @@ namespace CTMCentral\FriendsList\mysql;
 
 use CTMcentral\FriendsList\mysql\tasks\BulkDatabaseQueryTask;
 use CTMcentral\FriendsList\mysql\tasks\DatabaseQueryTask;
+use Kreait\Firebase\Factory;
 use PDO;
 use PDOException;
 use pocketmine\Server;
@@ -18,6 +19,8 @@ class Database{
 	private static $credentials = [];
 
 	public static function load(string $host, string $schema, string $user, string $password) : void{
+
+		$factory = (new Factory)->withServiceAccount('/path/to/firebase_credentials.json');
 		self::$credentials = [
 			"host" => $host,
 			"schema" => $schema,

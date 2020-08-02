@@ -1,0 +1,15 @@
+{
+    "name": "ctmcentral/friends",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "provsalt",
+            "email": "provsalt@gmail.com"
+        }
+    ],
+    "require": {
+		"kreait/firebase-php": "5.7.0"
+	}
+}
