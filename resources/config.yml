@@ -1,9 +1,9 @@
 database:
   # Edit these settings only if you choose "mysql".
   mysql:
-    host: no
+    host: 0.0.0.0
     # Avoid using the "root" user for security reasons.
-    username: no
-    password: no
-    schema: friends
+    username: root
+    password: password
+    schema: schema
   # The maximum number of simultaneous SQL queries
