@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CTMcentral\FriendsList\mysql\tasks;
+namespace CTMCentral\FriendsList\mysql\tasks;
 
 use CTMCentral\FriendsList\mysql\Database;
 use pocketmine\scheduler\AsyncTask;
