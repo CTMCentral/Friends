@@ -1,9 +1,2 @@
 database:
-  # Edit these settings only if you choose "mysql".
-  mysql:
-    host: 0.0.0.0
-    # Avoid using the "root" user for security reasons.
-    username: root
-    password: password
-    schema: schema
-  # The maximum number of simultaneous SQL queries
+  projectId: "coolfriendlist"

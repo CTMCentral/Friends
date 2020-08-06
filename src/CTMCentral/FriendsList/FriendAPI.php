@@ -9,6 +9,8 @@ use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\exceptions\NotYourFriendException;
 use CTMCentral\FriendsList\exceptions\RequestNotFound;
 use CTMCentral\FriendsList\mysql\Database;
+use Google\Cloud\Firestore\FieldPath;
+use Google\Cloud\Firestore\FieldValue;
 
 class FriendAPI {
 
@@ -24,37 +26,35 @@ class FriendAPI {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Database::querySync("SELECT username FROM friends WHERE username = :username", [":username" => $friendsname]);
-		if (empty($queryfriendsname)) {
+		$queryfriendsname = Loader::$db->collection("friends")->document($friendsname);
+		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
-		$player = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
+		$player = Loader::$db->collection("friends")->document($username);
+		$playersnapshot = $player->snapshot();
 		/**
 		 * Update friendlist for the user
 		 */
-		if($player[0]["friendlist"] === null) {
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsname), ":username" => $username]);
+		if($playersnapshot["friendlist"] === null) {
+			var_dump($playersnapshot->data());
+			$player->update([["path" => "friendlist", "value" => [$friendsname]]]);
 		}else{
-			$friendsarray = unserialize($player[0]["friendlist"]);
-			array_push($friendsarray, $friendsname);
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $username]);
+			var_dump($player->snapshot()->get(new FieldPath(['friendlist'])));
+			$player->update([["path" => "friendlist", "value" => FieldValue::arrayUnion([$friendsname])]]);
 		}
 		/**
 		 * Update friendslist for the friend
 		 */
 
-		$friends = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $friendsname]);
+		$friendsnapshot = $queryfriendsname->snapshot();
 
-		if($friends[0]["friendlist"] === null) {
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsname), ":username" => $username]);
+		if($friendsnapshot->data()["friendlist"] === null) {
+			$player->update([["path" => "friendlist", "value" => [$friendsname]]]);
 			return;
 		}else{
-			$friendsarray = unserialize($friends[0]["friendlist"]);
-			array_push($friendsarray, $friendsname);
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $username]);
+			$player->update([["path" => "friendlist", "value" => FieldValue::arrayUnion([$friendsname])]]);
 			return;
 		}
-
 	}
 
 	/**

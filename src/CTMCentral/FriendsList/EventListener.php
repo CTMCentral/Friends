@@ -20,11 +20,13 @@ class EventListener implements Listener {
 	public function onJoin(PlayerLoginEvent $event) {
 		$player = $event->getPlayer();
 		if ($player->hasPlayedBefore()) return;
-		Database::queryAsync("REPLACE INTO friends(username, enabled) VALUES (:username, :enabled);",
-		[
-			":username" => $player->getName(),
-			":enabled" => true
-		]);
+		Loader::$db->collection("friends")->document($player->getName())->set(
+			[
+				"friendlist" => null,
+				"requestlist" => null,
+				"enabled" => true
+			]
+		);
 	}
 	public function getOwner(): Loader {
 		return $this->owner;
