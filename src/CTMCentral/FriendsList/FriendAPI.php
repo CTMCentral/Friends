@@ -9,8 +9,6 @@ use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\exceptions\NotYourFriendException;
 use CTMCentral\FriendsList\exceptions\RequestNotFound;
 use CTMCentral\FriendsList\mysql\Database;
-use Google\Cloud\Firestore\FieldPath;
-use Google\Cloud\Firestore\FieldValue;
 
 class FriendAPI {
 
@@ -36,11 +34,11 @@ class FriendAPI {
 		 * Update friendlist for the user
 		 */
 		if($playersnapshot["friendlist"] === null) {
-			var_dump($playersnapshot->data());
 			$player->update([["path" => "friendlist", "value" => [$friendsname]]]);
 		}else{
-			var_dump($player->snapshot()->get(new FieldPath(['friendlist'])));
-			$player->update([["path" => "friendlist", "value" => FieldValue::arrayUnion([$friendsname])]]);
+			$playerfriends = $playersnapshot->get("friendlist");
+			array_push($playerfriends, $friendsname);
+			$player->update([["path" => "friendlist", "value" => $playerfriends]]);
 		}
 		/**
 		 * Update friendslist for the friend
@@ -49,10 +47,12 @@ class FriendAPI {
 		$friendsnapshot = $queryfriendsname->snapshot();
 
 		if($friendsnapshot->data()["friendlist"] === null) {
-			$player->update([["path" => "friendlist", "value" => [$friendsname]]]);
+			$queryfriendsname->update([["path" => "friendlist", "value" => [$username]]]);
 			return;
 		}else{
-			$player->update([["path" => "friendlist", "value" => FieldValue::arrayUnion([$friendsname])]]);
+			$frinedlist = $friendsnapshot->get("friendlist");
+			array_push($frinedlist, $username);
+			$queryfriendsname->update([["path" => "friendlist", "value" => $frinedlist]]);
 			return;
 		}
 	}
