@@ -3,8 +3,8 @@
 namespace CTMCentral\FriendsList\commands;
 
 use CortexPE\Commando\BaseCommand;
-use CTMCentral\FriendsList\commands\subcommands\AddSubCommand;
-use CTMCentral\FriendsList\commands\subcommands\RemoveSubCommand;
+use CTMCentral\FriendsList\commands\subcommands\addSubCommand;
+use CTMCentral\FriendsList\commands\subcommands\removeSubCommand;
 use jasonwynn10\HubTools\Main;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
@@ -22,7 +22,7 @@ class FriendCommand extends BaseCommand implements PluginOwned {
 	}
 
 	protected function prepare(): void{
-		$this->registerSubCommand(new AddSubCommand($this->getPlugin(), "add", "Add a friend"));
-		$this->registerSubCommand(new RemoveSubCommand($this->getPlugin(), "remove", "Removes a friend"));
+		$this->registerSubCommand(new addSubCommand($this->getPlugin(), "add", "Add a friend"));
+		$this->registerSubCommand(new removeSubCommand($this->getPlugin(), "remove", "Removes a friend"));
 	}
 }

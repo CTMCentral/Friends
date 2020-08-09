@@ -3,11 +3,11 @@
 namespace CTMCentral\FriendsList;
 
 use CTMCentral\FriendsList\asynctasks\addFriendTask;
+use CTMCentral\FriendsList\asynctasks\removeFriendTask;
 use CTMCentral\FriendsList\asynctasks\sendFriendRequestTask;
 use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
 use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
-use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\exceptions\NotYourFriendException;
 use CTMCentral\FriendsList\exceptions\RequestNotFound;
 use pocketmine\Server;
@@ -38,7 +38,6 @@ class FriendAPI {
 	 * @param String $friendsname Username of the friend who is getting removed
 	 * @throws FriendNotFoundException thrown when user is not found in database
 	 * @throws FriendUsernameSameException thrown when username is the same as the person is ading
-	 * @throws NoFriendsException throws when the user has no friends to remove
 	 * @throws NotYourFriendException throws when user is not in his friendlist
 	 */
 	public static function removeFriend(String $username, String $friendsname) :void {
@@ -46,32 +45,16 @@ class FriendAPI {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Database::querySync("SELECT username FROM friends WHERE username = :username", [":username" => $friendsname]);
-		if (empty($queryfriendsname)) {
+		$friends = Loader::getDataBase()->collection("friendlist")->document($friendsname);
+		if (!$friends->snapshot()->exists()){
 			throw new FriendNotFoundException();
 		}
 
-		$friends = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
-		if (!array_search($friendsname, $friends[0]["friendlist"])){
+		$queryfriendsname = Loader::getDataBase()->collection("friends")->document($username)->snapshot()->get("friendlist");
+		if (!array_search($friendsname, $queryfriendsname)) {
 			throw new NotYourFriendException();
 		}
-		if($friends[0]["friendlist"] !== null) {
-			$friendsarray = unserialize($friends[0]["friendlist"]);
-			// ty stackoverflow
-			if (($key = array_search($friendsname, $friendsarray)) !== false) {
-				unset($friendsarray[$key]);
-			}
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $username]);
-		}else {
-			throw new NoFriendsException();
-		}
-		$frienduser = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $friendsname]);
-			$friendsarray = unserialize($frienduser[0]["friendlist"]);
-			// ty stackoverflow
-			if (($key = array_search($username, $friendsarray)) !== false) {
-				unset($friendsarray[$key]);
-			}
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $friendsname]);
+		Server::getInstance()->getAsyncPool()->submitTask(new removeFriendTask($username, $friendsname));
 	}
 
 	/**

@@ -27,13 +27,14 @@ class removeFriendTask extends AsyncTask {
 		/**
 		 * Update friendlist for the user
 		 */
-		if($playersnapshot["friendlist"] === null) {
 			$player->update([["path" => "friendlist", "value" => [$this->friendsname]]]);
-		}else{
+			// ty stackoverflow
+			if (($key = array_search($this->friendsname, $friendsarray)) !== false) {
+				unset($friendsarray[$key]);
+			}
 			$playerfriends = $playersnapshot->get("friendlist");
 			array_push($playerfriends, $this->friendsname);
 			$player->update([["path" => "friendlist", "value" => $playerfriends]]);
-		}
 		/**
 		 * Update friendslist for the friend
 		 */
