@@ -3,6 +3,7 @@
 namespace CTMCentral\FriendsList;
 
 use CTMCentral\FriendsList\asynctasks\addFriendTask;
+use CTMCentral\FriendsList\asynctasks\sendFriendRequestTask;
 use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
 use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
@@ -25,7 +26,7 @@ class FriendAPI {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Loader::$db->collection("friends")->document($friendsname);
+		$queryfriendsname = Loader::getDataBase()->collection("friends")->document($friendsname);
 		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
@@ -81,31 +82,19 @@ class FriendAPI {
 	 * @throws FriendUsernameSameException
 	 */
 
-	public static function requestFriend(String $username, String $friendsname) :void {
+	public static function sendFriendRequest(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname =
+		$queryfriendsname = Loader::getDataBase()->document($friendsname);
+		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
-
-		$isdisabled = Database::querySync("SELECT enabled FROM friends WHERE username = :username", [":username" => $friendsname]);
-		if ($isdisabled[0]["enabled"] === 0) {
+		if ($queryfriendsname->snapshot()->get("enabled") === false) {
 			throw new FriendRequestDisabledException();
 		}
-
-		$requests = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
-
-		if($requests[0]["requestlist"] === null) {
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsname), ":username" => $username]);
-			return;
-		}else{
-			$friendsarray = unserialize($requests[0]["requestlist"]);
-			array_push($friendsarray, $friendsname);
-			Database::queryAsync("UPDATE friends SET friendlist = :friendlist WHERE username = :username", ["friendlist" => serialize($friendsarray), ":username" => $username]);
-			return;
-		}
+		Server::getInstance()->getAsyncPool()->submitTask(new sendFriendRequestTask($username, $friendsname));
 	}
 
 	/**

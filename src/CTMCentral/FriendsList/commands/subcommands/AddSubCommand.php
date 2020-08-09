@@ -20,7 +20,7 @@ class AddSubCommand extends BaseSubCommand {
 			return;
 		}
 		try {
-			FriendAPI::requestFriend($sender->getName(), $args["add"]);
+			FriendAPI::sendFriendRequest($sender->getName(), $args["add"]);
 		}catch(FriendNotFoundException $exception) {
 			$sender->sendMessage(TextFormat::RED . "User is not found, thus your friend request has not been sent.");
 			return;

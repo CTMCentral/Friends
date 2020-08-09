@@ -24,6 +24,7 @@ class EventListener implements Listener {
 			[
 				"friendlist" => null,
 				"requestlist" => null,
+				"requestsentlist", null,
 				"enabled" => true
 			]
 		);
