@@ -22,4 +22,11 @@ class Loader extends PluginBase{
 		$this->getServer()->getCommandMap()->register("friends", new FriendCommand($this, "friend", "Command used to show friends GUI", ["f"]));
 		self::$db = new FirestoreClient(['projectId' => $this->getConfig()->getNested("database.projectId")]);
 	}
+
+	/**
+	 * @return FirestoreClient
+	 */
+	public static function getDataBase() {
+		return self::$db;
+	}
 }

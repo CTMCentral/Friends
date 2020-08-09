@@ -2,13 +2,14 @@
 
 namespace CTMCentral\FriendsList;
 
+use CTMCentral\FriendsList\asynctasks\addFriendTask;
 use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
 use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
 use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
 use CTMCentral\FriendsList\exceptions\NoFriendsException;
 use CTMCentral\FriendsList\exceptions\NotYourFriendException;
 use CTMCentral\FriendsList\exceptions\RequestNotFound;
-use CTMCentral\FriendsList\mysql\Database;
+use pocketmine\Server;
 
 class FriendAPI {
 
@@ -28,33 +29,7 @@ class FriendAPI {
 		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
-		$player = Loader::$db->collection("friends")->document($username);
-		$playersnapshot = $player->snapshot();
-		/**
-		 * Update friendlist for the user
-		 */
-		if($playersnapshot["friendlist"] === null) {
-			$player->update([["path" => "friendlist", "value" => [$friendsname]]]);
-		}else{
-			$playerfriends = $playersnapshot->get("friendlist");
-			array_push($playerfriends, $friendsname);
-			$player->update([["path" => "friendlist", "value" => $playerfriends]]);
-		}
-		/**
-		 * Update friendslist for the friend
-		 */
-
-		$friendsnapshot = $queryfriendsname->snapshot();
-
-		if($friendsnapshot->data()["friendlist"] === null) {
-			$queryfriendsname->update([["path" => "friendlist", "value" => [$username]]]);
-			return;
-		}else{
-			$frinedlist = $friendsnapshot->get("friendlist");
-			array_push($frinedlist, $username);
-			$queryfriendsname->update([["path" => "friendlist", "value" => $frinedlist]]);
-			return;
-		}
+		Server::getInstance()->getAsyncPool()->submitTask(new addFriendTask($username, $friendsname));
 	}
 
 	/**
@@ -111,8 +86,7 @@ class FriendAPI {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Database::querySync("SELECT username FROM friends WHERE username = :username", [":username" => $friendsname]);
-		if (empty($queryfriendsname)) {
+		$queryfriendsname =
 			throw new FriendNotFoundException();
 		}
 
