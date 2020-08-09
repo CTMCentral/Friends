@@ -5,7 +5,7 @@ namespace CTMCentral\FriendsList\asynctasks;
 use CTMCentral\FriendsList\Loader;
 use pocketmine\scheduler\AsyncTask;
 
-class addFriendTask extends AsyncTask {
+class removeFriendTask extends AsyncTask {
 
 	/**
 	 * @var String
