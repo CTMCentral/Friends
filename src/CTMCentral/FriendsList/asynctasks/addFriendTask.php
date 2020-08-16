@@ -2,8 +2,7 @@
 
 namespace CTMCentral\FriendsList\asynctasks;
 
-use CTMCentral\FriendsList\exceptions\NoFriendsException;
-use CTMCentral\FriendsList\Loader;
+use CTMCentral\FriendsList\Database;
 use pocketmine\scheduler\AsyncTask;
 
 class addFriendTask extends AsyncTask {
@@ -23,32 +22,34 @@ class addFriendTask extends AsyncTask {
 	}
 
 	public function onRun(): void{
-		$player = Loader::getDataBase()->collection("friends")->document($this->username);
+		$player = Database::getDataBase()->collection("friends")->document($this->username);
 		$playersnapshot = $player->snapshot();
 		/**
 		 * Update friendlist for the user
 		 */
-		if($playersnapshot["friendlist"] !== null) {
-			// ty stackoverflow
-			$friendlist = $playersnapshot->get("friendlist");
-			if (($key = array_search($this->friendsname, $friendlist)) !== false) {
-				unset($friendlist[$key]);
-			}
-			$player->update([["path" => "friendlist", "value" => $friendlist]]);
+		if($playersnapshot["friendlist"] === null) {
+			$player->update([["path" => "friends", "value" => [$this->friendsname]]]);
 		}else{
-			throw new NoFriendsException();
+			$playerfriends = $playersnapshot->get("friends");
+			array_push($playerfriends, $this->friendsname);
+			$player->update([["path" => "friends", "value" => $playerfriends]]);
 		}
 		/**
 		 * Update friendslist for the friend
 		 */
 
-		$friend =  Loader::getDataBase()->collection("friends")->document($this->friendsname);
-		$friendlist = $friend->snapshot()->get("friendlist");
-		$friendsnapshot = $friend->snapshot();
-		if (($key = array_search($this->friendsname, $friendlist)) !== false) {
-			unset($friendlist[$key]);
+		$frienddata =  Database::getDataBase()->collection("friends")->document($this->friendsname);
+
+		$friendsnapshot = $frienddata->snapshot();
+
+		if($friendsnapshot->data()["friendlist"] === null) {
+			$frienddata->update([["path" => "friends", "value" => [$this->username]]]);
+			return;
+		}else{
+			$frinedlist = $friendsnapshot->get("friends");
+			array_push($frinedlist, $this->username);
+			$frienddata->update([["path" => "friends", "value" => $frinedlist]]);
+			return;
 		}
-		$friendlist->update([["path" => "friendlist", "value" => $friendlist]]);
-		return;
 	}
 }

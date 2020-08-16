@@ -2,7 +2,7 @@
 
 namespace CTMCentral\FriendsList\asynctasks;
 
-use CTMCentral\FriendsList\Loader;
+use Google\Cloud\Firestore\FirestoreClient;
 use pocketmine\scheduler\AsyncTask;
 
 class removeFriendTask extends AsyncTask {
@@ -15,42 +15,39 @@ class removeFriendTask extends AsyncTask {
 	 * @var String
 	 */
 	private $username;
+	/**
+	 * @var String
+	 */
+	private $projectid;
 
-	public function __construct(String $username, String $friendsname){
+	public function __construct(String $username, String $friendsname, String $projectid){
 		$this->username = $username;
 		$this->friendsname = $friendsname;
+		$this->projectid = $projectid;
 	}
 
 	public function onRun(): void{
-		$player = Loader::getDataBase()->collection("friends")->document($this->username);
+		$db = new FirestoreClient(['projectId' => $this->projectid]);
+		$player = $db->collection("friends")->document($this->username);
 		$playersnapshot = $player->snapshot();
 		/**
 		 * Update friendlist for the user
 		 */
-			$player->update([["path" => "friendlist", "value" => [$this->friendsname]]]);
 			// ty stackoverflow
-			if (($key = array_search($this->friendsname, $friendsarray)) !== false) {
-				unset($friendsarray[$key]);
-			}
 			$playerfriends = $playersnapshot->get("friendlist");
-			array_push($playerfriends, $this->friendsname);
+			if (($key = array_search($this->friendsname, $playerfriends)) !== false) {
+				unset($playerfriends[$key]);
+			}
 			$player->update([["path" => "friendlist", "value" => $playerfriends]]);
 		/**
 		 * Update friendslist for the friend
 		 */
-
-		$frienddata =  Loader::getDataBase()->collection("friends")->document($this->friendsname);
-
-		$friendsnapshot = $frienddata->snapshot();
-
-		if($friendsnapshot->data()["friendlist"] === null) {
-			$frienddata->update([["path" => "friendlist", "value" => [$this->username]]]);
-			return;
-		}else{
-			$frinedlist = $friendsnapshot->get("friendlist");
-			array_push($frinedlist, $this->username);
-			$frienddata->update([["path" => "friendlist", "value" => $frinedlist]]);
-			return;
+		$frienddata =  $db->collection("friends")->document($this->friendsname);
+		$playerfriends = $frienddata->snapshot()->get("friendlist");
+		if (($key = array_search($this->friendsname, $playerfriends)) !== false) {
+			unset($playerfriends[$key]);
 		}
+		$frienddata->update([["path" => "friendlist", "value" => $playerfriends]]);
+		return;
 	}
 }

@@ -15,18 +15,28 @@ use pocketmine\Server;
 class FriendAPI {
 
 	/**
+	 * @var String
+	 */
+	private $projectid;
+
+	public function __construct(String $projectid){
+		$this->projectid = $projectid;
+	}
+
+	/**
 	 * @param String $username
 	 * @param String $friendsname
 	 * @throws FriendNotFoundException throws when Friend's username is not found in db
 	 * @throws FriendUsernameSameException throws when friend's username is same as username
 	 */
-	public static function addFriend(String $username, String $friendsname) :void {
+	public function addFriend(String $username, String $friendsname) :void {
 
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Loader::getDataBase()->collection("friends")->document($friendsname);
+		$db = (new Database())->getDataBase();
+		$queryfriendsname = $db->collection("friends")->document($friendsname);
 		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
@@ -40,21 +50,21 @@ class FriendAPI {
 	 * @throws FriendUsernameSameException thrown when username is the same as the person is ading
 	 * @throws NotYourFriendException throws when user is not in his friendlist
 	 */
-	public static function removeFriend(String $username, String $friendsname) :void {
+	public function removeFriend(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
 		}
-
-		$friends = Loader::getDataBase()->collection("friendlist")->document($friendsname);
+		$db = (new Database())::getDataBase();
+		$friends = $db->collection("friends")->document($friendsname);
 		if (!$friends->snapshot()->exists()){
 			throw new FriendNotFoundException();
 		}
 
-		$queryfriendsname = Loader::getDataBase()->collection("friends")->document($username)->snapshot()->get("friendlist");
-		if (!array_search($friendsname, $queryfriendsname)) {
+		$queryfriendsname = $db->collection("friends")->document($username)->snapshot()->get("friendlist");
+		if (array_search($friendsname, $queryfriendsname) === false) {
 			throw new NotYourFriendException();
 		}
-		Server::getInstance()->getAsyncPool()->submitTask(new removeFriendTask($username, $friendsname));
+		Server::getInstance()->getAsyncPool()->submitTask(new removeFriendTask($username, $friendsname, $this->projectid));
 	}
 
 	/**
@@ -65,12 +75,12 @@ class FriendAPI {
 	 * @throws FriendUsernameSameException
 	 */
 
-	public static function sendFriendRequest(String $username, String $friendsname) :void {
+	public function sendFriendRequest(String $username, String $friendsname) :void {
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Loader::getDataBase()->document($friendsname);
+		$queryfriendsname = Database::getDataBase()->collection("friends")->document($friendsname);
 		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
@@ -85,7 +95,7 @@ class FriendAPI {
 	 * @param String $username the username of the player
 	 * @return array returns [] if there is none
 	 */
-	public static function listFriends(String $username) :array {
+	public function listFriends(String $username) :array {
 		$list = Database::querySync("SELECT friendlist FROM friends WHERE username = :username", [":username" => $username]);
 
 		return unserialize($list[0]["friendlist"]);
@@ -95,7 +105,7 @@ class FriendAPI {
 	 * @param String $username Username that is accepting
 	 * @param String $friendname Username that has requested to add friend
 	 */
-	public static function acceptrequest(String $username, String $friendname) :void {
+	public function acceptrequest(String $username, String $friendname) :void {
 		$requestlist = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
 		$requestarray = unserialize($requestlist[0]["friendlist"]);
 		if (!array_search($friendname, $requestarray)) {
@@ -108,7 +118,7 @@ class FriendAPI {
 			self::addFriend($username, $friendname);
 		}
 	}
-	public static function declineRequest(String $username, String $friendsname) :void {
+	public function declineRequest(String $username, String $friendsname) :void {
 		$requestlist = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
 		$requestarray = unserialize($requestlist[0]["friendlist"]);
 		if (!array_search($friendsname, $requestarray)) {
@@ -119,7 +129,7 @@ class FriendAPI {
 			unset($requestarray[$key]);
 		}
 	}
-	public static function listRequest(String $username) {
+	public function listRequest(String $username) {
 		$list = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
 
 		return unserialize($list[0]["friendlist"]);
