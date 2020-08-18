@@ -5,6 +5,12 @@ namespace CTMCentral\FriendsList;
 use Google\Cloud\Firestore\FirestoreClient;
 
 class Database {
+
+	/**
+	 * @var String
+	 */
+	public static $projectid;
+
 	/**
 	 * @var FirestoreClient
 	 */
@@ -18,6 +24,7 @@ class Database {
 	}
 
 	public static function init(String $projectID) {
+		self::$projectid = $projectID;
 		self::$db = new FirestoreClient(['projectId' => $projectID]);
 	}
 }

@@ -23,6 +23,7 @@ class removeSubCommand extends BaseSubCommand {
 			$sender->sendMessage(TextFormat::RED . "You would need to mention someone to remove");
 			return;
 		}
+		$api = new FriendAPI();
 		try {
 			FriendAPI::removeFriend($sender->getName(), $args["remove"]);
 		}catch(FriendNotFoundException $exception) {

@@ -15,7 +15,5 @@ class Loader extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getServer()->getCommandMap()->register("friends", new FriendCommand($this, "friend", "Command used to show friends GUI", ["f"]));
 		(new Database())->init($this->getConfig()->getNested("database.projectId"));
-		$friend = new FriendAPI($this->getConfig()->getNested("database.projectId"));
-		$friend->removeFriend("provsalt", "jasonwynn10");
 	}
 }

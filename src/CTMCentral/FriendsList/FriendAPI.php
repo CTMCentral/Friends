@@ -19,8 +19,8 @@ class FriendAPI {
 	 */
 	private $projectid;
 
-	public function __construct(String $projectid){
-		$this->projectid = $projectid;
+	public function __construct(){
+		$this->projectid = Database::$projectid;
 	}
 
 	/**
@@ -40,7 +40,7 @@ class FriendAPI {
 		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
-		Server::getInstance()->getAsyncPool()->submitTask(new addFriendTask($username, $friendsname));
+		Server::getInstance()->getAsyncPool()->submitTask(new addFriendTask($username, $friendsname, $this->projectid));
 	}
 
 	/**

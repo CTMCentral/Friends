@@ -2,7 +2,7 @@
 
 namespace CTMCentral\FriendsList\asynctasks;
 
-use CTMCentral\FriendsList\Database;
+use Google\Cloud\Firestore\FirestoreClient;
 use pocketmine\scheduler\AsyncTask;
 
 class addFriendTask extends AsyncTask {
@@ -15,14 +15,17 @@ class addFriendTask extends AsyncTask {
 	 * @var String
 	 */
 	private $username;
+	private $projectid;
 
-	public function __construct(String $username, String $friendsname){
+	public function __construct(String $username, String $friendsname, String $projectid){
 		$this->username = $username;
 		$this->friendsname = $friendsname;
+		$this->projectid = $projectid;
 	}
 
 	public function onRun(): void{
-		$player = Database::getDataBase()->collection("friends")->document($this->username);
+		$db = new FirestoreClient(['projectId' => $this->projectid]);
+		$player = $db->collection("friends")->document($this->username);
 		$playersnapshot = $player->snapshot();
 		/**
 		 * Update friendlist for the user
@@ -30,7 +33,7 @@ class addFriendTask extends AsyncTask {
 		if($playersnapshot["friendlist"] === null) {
 			$player->update([["path" => "friends", "value" => [$this->friendsname]]]);
 		}else{
-			$playerfriends = $playersnapshot->get("friends");
+			$playerfriends = $playersnapshot->get("friendlist");
 			array_push($playerfriends, $this->friendsname);
 			$player->update([["path" => "friends", "value" => $playerfriends]]);
 		}
@@ -38,17 +41,17 @@ class addFriendTask extends AsyncTask {
 		 * Update friendslist for the friend
 		 */
 
-		$frienddata =  Database::getDataBase()->collection("friends")->document($this->friendsname);
+		$frienddata =  $db->collection("friends")->document($this->friendsname);
 
 		$friendsnapshot = $frienddata->snapshot();
 
 		if($friendsnapshot->data()["friendlist"] === null) {
-			$frienddata->update([["path" => "friends", "value" => [$this->username]]]);
+			$frienddata->update([["path" => "friendlist", "value" => [$this->username]]]);
 			return;
 		}else{
-			$frinedlist = $friendsnapshot->get("friends");
+			$frinedlist = $friendsnapshot->get("friendlist");
 			array_push($frinedlist, $this->username);
-			$frienddata->update([["path" => "friends", "value" => $frinedlist]]);
+			$frienddata->update([["path" => "friendlist", "value" => $frinedlist]]);
 			return;
 		}
 	}
