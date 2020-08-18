@@ -76,18 +76,20 @@ class FriendAPI {
 	 */
 
 	public function sendFriendRequest(String $username, String $friendsname) :void {
+		$db = (new Database())::getDataBase();
+
 		if ($username === $friendsname) {
 			throw new FriendUsernameSameException();
 		}
 
-		$queryfriendsname = Database::getDataBase()->collection("friends")->document($friendsname);
+		$queryfriendsname = $db->collection("friends")->document($friendsname);
 		if (!$queryfriendsname->snapshot()->exists()) {
 			throw new FriendNotFoundException();
 		}
 		if ($queryfriendsname->snapshot()->get("enabled") === false) {
 			throw new FriendRequestDisabledException();
 		}
-		Server::getInstance()->getAsyncPool()->submitTask(new sendFriendRequestTask($username, $friendsname));
+		Server::getInstance()->getAsyncPool()->submitTask(new sendFriendRequestTask($username, $friendsname, $this->projectid));
 	}
 
 	/**

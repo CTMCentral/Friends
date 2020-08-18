@@ -2,7 +2,7 @@
 
 namespace CTMCentral\FriendsList\asynctasks;
 
-use CTMCentral\FriendsList\Database;
+use Google\Cloud\Firestore\FirestoreClient;
 use pocketmine\scheduler\AsyncTask;
 
 class sendFriendRequestTask extends AsyncTask {
@@ -16,14 +16,15 @@ class sendFriendRequestTask extends AsyncTask {
 	 */
 	private $friendsname;
 
-	public function __construct(String $username, String $friendsname){
+	public function __construct(String $username, String $friendsname, String $projectid){
 		$this->username = $username;
 		$this->friendsname = $friendsname;
+		$this->projectid = $projectid;
 	}
 
 	public function onRun(): void{
-
-		$requests = Database::getDataBase()->collection("friends")->document($this->username);
+		$db = new FirestoreClient(['projectId' => $this->projectid]);
+		$requests = $db->collection("friends")->document($this->username);
 
 		if($requests->snapshot()->get("requestsentlist") === null) {
 			$requests->update(["path" => "requestsentlist", "value" => $this->friendsname]);
@@ -33,7 +34,7 @@ class sendFriendRequestTask extends AsyncTask {
 			$requests->update(["path" => "requestsentlist", "value" => $requstlist]);
 		}
 
-		$requests = Database::getDataBase()->collection("friends")->document($this->friendsname);
+		$requests = $db->collection("friends")->document($this->friendsname);
 
 		if($requests->snapshot()->get("requestlist") === null) {
 			$requests->update(["path" => "requestlist", "value" => $this->username]);
