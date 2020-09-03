@@ -14,6 +14,6 @@ class listFriendTask extends AsyncTask {
 
 	public function onRun(): void{
 		$db = (new FirestoreClient(CredentialsLoader::fromWellKnownFile()));
-
+		$db->collection("friends")
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace CTMCentral\Friends;
 
-use CTMCentral\Friends\mysql\Database;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 
@@ -20,7 +19,7 @@ class EventListener implements Listener {
 	public function onJoin(PlayerLoginEvent $event) {
 		$player = $event->getPlayer();
 		if ($player->hasPlayedBefore()) return;
-		Loader::$db->collection("friends")->document($player->getName())->set(
+		Database::getDataBase()->collection("friends")->document($player->getName())->set(
 			[
 				"friendlist" => null,
 				"requestlist" => null,
