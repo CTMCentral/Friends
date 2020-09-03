@@ -5,7 +5,8 @@ An advanced modern async in-game friends list system for PocketMine-MP Servers u
 ### Developer docs
 Make sure you get your JSON key in 
 
- ```windows: %APPDATA%/gcloud/application_default_credentials.json```
+```windows: %APPDATA%/gcloud/application_default_credentials.json```
+
 ```others: $HOME/.config/gcloud/application_default_credentials.json```
  
 To get the instance of friends run the following
