@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace CTMCentral\Friends;
 
 use CTMCentral\{
@@ -159,7 +161,7 @@ class FriendAPI {
 			$db->collection("friends")->document($username)->update([["path" => "requestlist", "value" => $requestlist]]);
 		}
 	}
-	public function listRequest(String $username, int $limit = null){
+	public function listRequest(String $username) :array{
 		$db = (new Database())::getDataBase();
 		$queryfriendsname = $db->collection("friends")->document($username);
 		if (!$queryfriendsname->snapshot()->exists()) {
