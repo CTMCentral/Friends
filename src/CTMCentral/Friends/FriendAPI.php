@@ -1,16 +1,16 @@
 <?php
 
-namespace CTMCentral\FriendsList;
+namespace CTMCentral\Friends;
 
-use CTMCentral\FriendsList\asynctasks\addFriendTask;
-use CTMCentral\FriendsList\asynctasks\removeFriendTask;
-use CTMCentral\FriendsList\asynctasks\sendFriendRequestTask;
-use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
-use CTMCentral\FriendsList\exceptions\FriendRequestDisabledException;
-use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
-use CTMCentral\FriendsList\exceptions\NotYourFriendException;
-use CTMCentral\FriendsList\exceptions\RequestNotFound;
-use CTMCentral\FriendsList\exceptions\UserNotFound;
+use CTMCentral\Friends\asynctasks\addFriendTask;
+use CTMCentral\Friends\asynctasks\removeFriendTask;
+use CTMCentral\Friends\asynctasks\sendFriendRequestTask;
+use CTMCentral\Friends\exceptions\FriendNotFoundException;
+use CTMCentral\Friends\exceptions\FriendRequestDisabledException;
+use CTMCentral\Friends\exceptions\FriendUsernameSameException;
+use CTMCentral\Friends\exceptions\NotYourFriendException;
+use CTMCentral\Friends\exceptions\RequestNotFound;
+use CTMCentral\Friends\exceptions\UserNotFound;
 use Google\Auth\CredentialsLoader;
 use pocketmine\Server;
 

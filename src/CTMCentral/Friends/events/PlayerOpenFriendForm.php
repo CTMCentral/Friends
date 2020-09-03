@@ -1,6 +1,6 @@
 <?php
 
-namespace CTMCentral\FriendsList\events;
+namespace CTMCentral\Friends\events;
 
 use pocketmine\event\Cancellable;
 use pocketmine\event\Event;

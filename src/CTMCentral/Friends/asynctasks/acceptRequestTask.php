@@ -1,9 +1,9 @@
 <?php
 
-namespace CTMCentral\FriendsList\asynctasks;
+namespace CTMCentral\Friends\asynctasks;
 
-use CTMCentral\FriendsList\Database;
-use CTMCentral\FriendsList\exceptions\RequestNotFound;
+use CTMCentral\Friends\Database;
+use CTMCentral\Friends\exceptions\RequestNotFound;
 use pocketmine\scheduler\AsyncTask;
 
 class acceptRequestTask extends AsyncTask {

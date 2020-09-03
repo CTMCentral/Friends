@@ -1,6 +1,6 @@
 <?php
 
-namespace CTMCentral\FriendsList\exceptions;
+namespace CTMCentral\Friends\exceptions;
 
 use Exception;
 

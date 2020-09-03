@@ -1,6 +1,6 @@
 <?php
 
-namespace CTMCentral\FriendsList\asynctasks;
+namespace CTMCentral\Friends\asynctasks;
 
 use Google\Cloud\Firestore\FirestoreClient;
 use pocketmine\scheduler\AsyncTask;

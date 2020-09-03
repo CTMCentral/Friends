@@ -1,11 +1,11 @@
 <?php
 
-namespace CTMCentral\FriendsList\commands;
+namespace CTMCentral\Friends\commands;
 
 use CortexPE\Commando\BaseCommand;
-use CTMCentral\FriendsList\commands\subcommands\addSubCommand;
-use CTMCentral\FriendsList\commands\subcommands\removeSubCommand;
-use CTMCentral\FriendsList\events\PlayerOpenFriendForm;
+use CTMCentral\Friends\commands\subcommands\addSubCommand;
+use CTMCentral\Friends\commands\subcommands\removeSubCommand;
+use CTMCentral\Friends\events\PlayerOpenFriendForm;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginOwned;

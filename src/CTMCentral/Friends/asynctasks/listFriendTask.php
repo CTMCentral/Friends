@@ -1,6 +1,6 @@
 <?php
 
-namespace CTMCentral\FriendsList\asynctasks;
+namespace CTMCentral\Friends\asynctasks;
 
 use Google\Auth\CredentialsLoader;
 use Google\Cloud\Firestore\FirestoreClient;

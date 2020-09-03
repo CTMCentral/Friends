@@ -1,6 +1,6 @@
 <?php
 
-namespace CTMCentral\FriendsList;
+namespace CTMCentral\Friends;
 
 use Google\Cloud\Firestore\FirestoreClient;
 

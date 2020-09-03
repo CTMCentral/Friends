@@ -1,5 +1,5 @@
 name: Friends
-main: CTMCentral\FriendsList\Loader
+main: CTMCentral\Friends\Loader
 version: 0.0.2
 api: 4.0.0
 description: "An in-game friends list system for PocketMine-MP servers"

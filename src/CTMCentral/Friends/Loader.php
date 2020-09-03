@@ -1,8 +1,8 @@
 <?php
 
-namespace CTMCentral\FriendsList;
+namespace CTMCentral\Friends;
 
-use CTMCentral\FriendsList\commands\FriendCommand;
+use CTMCentral\Friends\commands\FriendCommand;
 use Google\Auth\CredentialsLoader;
 use pocketmine\plugin\PluginBase;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace CTMCentral\FriendsList\commands\subcommands;
+namespace CTMCentral\Friends\commands\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
-use CTMCentral\FriendsList\exceptions\FriendNotFoundException;
-use CTMCentral\FriendsList\exceptions\FriendUsernameSameException;
-use CTMCentral\FriendsList\FriendAPI;
+use CTMCentral\Friends\exceptions\FriendNotFoundException;
+use CTMCentral\Friends\exceptions\FriendUsernameSameException;
+use CTMCentral\Friends\FriendAPI;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;

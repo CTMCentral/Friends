@@ -1,8 +1,8 @@
 <?php
 
-namespace CTMCentral\FriendsList;
+namespace CTMCentral\Friends;
 
-use CTMCentral\FriendsList\mysql\Database;
+use CTMCentral\Friends\mysql\Database;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 
