@@ -2,15 +2,16 @@
 
 namespace CTMCentral\Friends;
 
-use CTMCentral\Friends\asynctasks\addFriendTask;
-use CTMCentral\Friends\asynctasks\removeFriendTask;
-use CTMCentral\Friends\asynctasks\sendFriendRequestTask;
-use CTMCentral\Friends\exceptions\FriendNotFoundException;
-use CTMCentral\Friends\exceptions\FriendRequestDisabledException;
-use CTMCentral\Friends\exceptions\FriendUsernameSameException;
-use CTMCentral\Friends\exceptions\NotYourFriendException;
-use CTMCentral\Friends\exceptions\RequestNotFound;
-use CTMCentral\Friends\exceptions\UserNotFound;
+use CTMCentral\{
+	Friends\asynctasks\addFriendTask,
+	Friends\asynctasks\removeFriendTask,
+	Friends\asynctasks\sendFriendRequestTask,
+	Friends\exceptions\FriendNotFoundException,
+	Friends\exceptions\FriendRequestDisabledException,
+	Friends\exceptions\FriendUsernameSameException,
+	Friends\exceptions\NotYourFriendException,
+	Friends\exceptions\RequestNotFound,
+	Friends\exceptions\UserNotFound};
 use Google\Auth\CredentialsLoader;
 use pocketmine\Server;
 
@@ -87,8 +88,10 @@ class FriendAPI {
 
 	/**
 	 * Request List of friends
+	 *
 	 * @param String $username the username of the player
 	 * @return array returns [] if there is none
+	 * @throws UserNotFound
 	 */
 	public function listFriends(String $username) :array {
 		$db = (new Database())::getDataBase();
@@ -100,8 +103,11 @@ class FriendAPI {
 	}
 
 	/**
-	 * @param String $username Username that is accepting
+	 * @param String $username   Username that is accepting
 	 * @param String $friendname Username that has requested to add friend
+	 * @throws FriendNotFoundException
+	 * @throws FriendUsernameSameException
+	 * @throws RequestNotFound
 	 */
 	public function acceptrequest(String $username, String $friendname) :void {
 		if ($username === $friendname) {
@@ -130,19 +136,35 @@ class FriendAPI {
 		Server::getInstance()->getAsyncPool()->submitTask(new addFriendTask($username, $friendname, CredentialsLoader::fromWellKnownFile()));
 	}
 	public function declineRequest(String $username, String $friendsname) :void {
-		$requestlist = Database::querySync("SELECT requestlist FROM friends WHERE username = :username", [":username" => $username]);
-		$requestarray = unserialize($requestlist[0]["friendlist"]);
-		if (!array_search($friendsname, $requestarray)) {
+		if ($username === $friendsname) {
+			throw new FriendUsernameSameException();
+		}
+		$db = (new Database)->getDatabase();
+		$queryfriendsname = $db->collection("friends")->document($friendsname);
+		if (!$queryfriendsname->snapshot()->exists()) {
+			throw new FriendNotFoundException();
+		}
+		$requestsentlist = $db->collection("friends")->document($username)->snapshot();
+		if (!array_search($friendsname, $requestsentlist->get("requestist"))) {
 			throw new RequestNotFound();
 		}
+		if (($key = array_search($username, $requestsentlist[0]["requestsentlist"])) !== false) {
+			unset($requestsentlist[$key]);
+			$db->collection("friends")->document($username)->update([["path" => "requestsentlist", "value" => $requestsentlist]]);
+		}
 
-		if (($key = array_search($username, $requestlist[0]["requestlist"])) !== false) {
-			unset($requestarray[$key]);
+		$requestlist = $db->collection("friends")->document($friendsname)->snapshot();
+		if (($key = array_search($friendsname, $requestlist[0]["requestlist"])) !== false) {
+			unset($requestlist[$key]);
+			$db->collection("friends")->document($username)->update([["path" => "requestlist", "value" => $requestlist]]);
 		}
 	}
-	public function listRequest(String $username, int $limit = null, ?callable $resuult){
-		if ($resuult !== null) {
-
+	public function listRequest(String $username, int $limit = null){
+		$db = (new Database())::getDataBase();
+		$queryfriendsname = $db->collection("friends")->document($username);
+		if (!$queryfriendsname->snapshot()->exists()) {
+			throw new UserNotFound();
 		}
+		return $db->collection("friends")->document($username)->snapshot()->get("requestlist");
 	}
 }
