@@ -23,11 +23,11 @@ class removeFriendTask extends AsyncTask {
 	public function __construct(String $username, String $friendsname, String $projectid){
 		$this->username = $username;
 		$this->friendsname = $friendsname;
-		$this->projectid = $projectid;
+		$this->json = $projectid;
 	}
 
 	public function onRun(): void{
-		$db = new FirestoreClient(['projectId' => $this->projectid]);
+		$db = new FirestoreClient(['projectId' => $this->json]);
 		$player = $db->collection("friends")->document($this->username);
 		$playersnapshot = $player->snapshot();
 		/**

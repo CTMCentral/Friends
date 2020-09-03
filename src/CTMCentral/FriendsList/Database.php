@@ -23,8 +23,7 @@ class Database {
 		return self::$db;
 	}
 
-	public static function init(String $projectID) {
-		self::$projectid = $projectID;
-		self::$db = new FirestoreClient(['projectId' => $projectID]);
+	public static function init(array $json) {
+		self::$db = new FirestoreClient($json);
 	}
 }

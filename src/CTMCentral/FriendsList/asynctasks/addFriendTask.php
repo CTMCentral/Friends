@@ -15,16 +15,19 @@ class addFriendTask extends AsyncTask {
 	 * @var String
 	 */
 	private $username;
-	private $projectid;
+	/**
+	 * @var array
+	 */
+	private $json;
 
-	public function __construct(String $username, String $friendsname, String $projectid){
+	public function __construct(String $username, String $friendsname, array $json){
 		$this->username = $username;
 		$this->friendsname = $friendsname;
-		$this->projectid = $projectid;
+		$this->json = $json;
 	}
 
 	public function onRun(): void{
-		$db = new FirestoreClient(['projectId' => $this->projectid]);
+		$db = new FirestoreClient(['projectId' => $this->json]);
 		$player = $db->collection("friends")->document($this->username);
 		$playersnapshot = $player->snapshot();
 		/**
