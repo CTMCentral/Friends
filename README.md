@@ -18,3 +18,5 @@ $frindapi = new FriendAPI();
 ```
 
 //TODO
+
+_'you have my approval' -shoghicp_
