@@ -7,3 +7,8 @@ author: CTMCentral
 authors:
  - jasonwynn10
  - provsalt
+permissions:
+  friends:
+    children:
+      admin:
+        description: Allows you to use admin commands
