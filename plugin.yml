@@ -1,6 +1,6 @@
 name: Friends
 main: CTMCentral\Friends\Loader
-version: 0.0.2
+version: 0.0.3
 api: 4.0.0
 description: "An in-game friends list system for PocketMine-MP servers"
 author: CTMCentral
@@ -11,4 +11,4 @@ permissions:
   friends:
     children:
       admin:
-        description: Allows you to use admin commands
+        description: Allows you to use adminSubCommand commands

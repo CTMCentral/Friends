@@ -4,6 +4,7 @@ namespace CTMCentral\Friends\commands;
 
 use CortexPE\Commando\BaseCommand;
 use CTMCentral\Friends\commands\subcommands\addSubCommand;
+use CTMCentral\Friends\commands\subcommands\adminSubCommand;
 use CTMCentral\Friends\commands\subcommands\removeSubCommand;
 use CTMCentral\Friends\events\PlayerOpenFriendFormEvent;
 use pocketmine\command\CommandSender;
@@ -24,5 +25,6 @@ class FriendCommand extends BaseCommand implements PluginOwned {
 	protected function prepare(): void{
 		$this->registerSubCommand(new addSubCommand($this->getPlugin(), "add", "Add a friend"));
 		$this->registerSubCommand(new removeSubCommand($this->getPlugin(), "remove", "Removes a friend"));
+		$this->registerSubCommand(new adminSubCommand($this->getPlugin(), "adminSubCommand", "forcefully controls friends"));
 	}
 }

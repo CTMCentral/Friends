@@ -2,7 +2,7 @@
 
 return [
     'interfaces' => [
-        'google.firestore.admin.v1.FirestoreAdmin' => [
+        'google.firestore.adminSubCommand.v1.FirestoreAdmin' => [
             'ListIndexes' => [
                 'pageStreaming' => [
                     'requestPageTokenGetMethod' => 'getPageToken',

@@ -28,7 +28,7 @@ use InvalidArgumentException;
  * use Google\Cloud\Core\Iam\PolicyBuilder;
  *
  * $builder = new PolicyBuilder();
- * $builder->addBinding('roles/admin', [ 'user:admin@domain.com' ]);
+ * $builder->addBinding('roles/adminSubCommand', [ 'user:adminSubCommand@domain.com' ]);
  * $result = $builder->result();
  * ```
  */
@@ -66,10 +66,10 @@ class PolicyBuilder
      *     'version' => 3,
      *     'bindings' => [
      *         [
-     *             'role' => 'roles/admin',
+     *             'role' => 'roles/adminSubCommand',
      *             'members' => [
-     *                 'user:admin@domain.com',
-     *                 'user2:admin@domain.com'
+     *                 'user:adminSubCommand@domain.com',
+     *                 'user2:adminSubCommand@domain.com'
      *             ],
      *             'condition' => [
      *                 'title' => 'match-prefix',
@@ -111,9 +111,9 @@ class PolicyBuilder
      * ```
      * $builder->setBindings([
      *     [
-     *         'role' => 'roles/admin',
+     *         'role' => 'roles/adminSubCommand',
      *         'members' => [
-     *             'user:admin@domain.com'
+     *             'user:adminSubCommand@domain.com'
      *         ],
      *         'condition' => [
      *             'expression' =>
@@ -183,7 +183,7 @@ class PolicyBuilder
      *
      * Example:
      * ```
-     * $builder->addBinding('roles/admin', [ 'user:admin@domain.com' ]);
+     * $builder->addBinding('roles/adminSubCommand', [ 'user:adminSubCommand@domain.com' ]);
      * ```
      *
      * @param  string $role A valid role for the service
@@ -242,14 +242,14 @@ class PolicyBuilder
      * ```
      * $builder->setBindings([
      *     [
-     *         'role' => 'roles/admin',
+     *         'role' => 'roles/adminSubCommand',
      *         'members' => [
-     *             'user:admin@domain.com',
-     *             'user2:admin@domain.com'
+     *             'user:adminSubCommand@domain.com',
+     *             'user2:adminSubCommand@domain.com'
      *         ]
      *     ]
      * ]);
-     * $builder->removeBinding('roles/admin', [ 'user:admin@domain.com' ]);
+     * $builder->removeBinding('roles/adminSubCommand', [ 'user:adminSubCommand@domain.com' ]);
      * ```
      *
      * @param  string $role A valid role for the service

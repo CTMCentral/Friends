@@ -2,7 +2,7 @@
 
 return [
     'interfaces' => [
-        'google.firestore.admin.v1.FirestoreAdmin' => [
+        'google.firestore.adminSubCommand.v1.FirestoreAdmin' => [
             'CreateIndex' => [
                 'method' => 'post',
                 'uriTemplate' => '/v1/{parent=projects/*/databases/*/collectionGroups/*}/indexes',

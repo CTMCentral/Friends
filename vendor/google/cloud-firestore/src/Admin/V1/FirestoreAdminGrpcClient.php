@@ -40,7 +40,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
     /**
      * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
      * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * the operation will be the type [IndexOperationMetadata][google.firestore.adminSubCommand.v1.IndexOperationMetadata].
      *
      * @param CreateIndexRequest $argument input argument
      * @param array              $metadata metadata
@@ -48,7 +48,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function CreateIndex(CreateIndexRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/CreateIndex',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/CreateIndex',
         $argument,
         ['\Google\LongRunning\Operation', 'decode'],
         $metadata, $options);
@@ -63,7 +63,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function ListIndexes(ListIndexesRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/ListIndexes',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/ListIndexes',
         $argument,
         ['\Google\Cloud\Firestore\Admin\V1\ListIndexesResponse', 'decode'],
         $metadata, $options);
@@ -78,7 +78,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function GetIndex(GetIndexRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/GetIndex',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/GetIndex',
         $argument,
         ['\Google\Cloud\Firestore\Admin\V1\Index', 'decode'],
         $metadata, $options);
@@ -93,7 +93,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function DeleteIndex(DeleteIndexRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/DeleteIndex',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/DeleteIndex',
         $argument,
         ['\Google\Protobuf\GPBEmpty', 'decode'],
         $metadata, $options);
@@ -108,7 +108,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function GetField(GetFieldRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/GetField',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/GetField',
         $argument,
         ['\Google\Cloud\Firestore\Admin\V1\Field', 'decode'],
         $metadata, $options);
@@ -117,13 +117,13 @@ class FirestoreAdminGrpcClient extends BaseStub {
     /**
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
+     * [FirestoreAdmin.UpdateField][google.firestore.adminSubCommand.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
      * changing any configuration that the caller isn't aware of. The field mask
      * should be specified as: `{ paths: "index_config" }`.
      *
      * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
      * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * the operation will be the type [FieldOperationMetadata][google.firestore.adminSubCommand.v1.FieldOperationMetadata].
      *
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
@@ -135,7 +135,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function UpdateField(UpdateFieldRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/UpdateField',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/UpdateField',
         $argument,
         ['\Google\LongRunning\Operation', 'decode'],
         $metadata, $options);
@@ -144,9 +144,9 @@ class FirestoreAdminGrpcClient extends BaseStub {
     /**
      * Lists the field configuration and metadata for this database.
      *
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
+     * Currently, [FirestoreAdmin.ListFields][google.firestore.adminSubCommand.v1.FirestoreAdmin.ListFields] only supports listing fields
      * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
+     * [FirestoreAdmin.ListFields][google.firestore.adminSubCommand.v1.FirestoreAdmin.ListFields] with the filter set to
      * `indexConfig.usesAncestorConfig:false`.
      *
      * @param ListFieldsRequest $argument input argument
@@ -155,7 +155,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function ListFields(ListFieldsRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/ListFields',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/ListFields',
         $argument,
         ['\Google\Cloud\Firestore\Admin\V1\ListFieldsResponse', 'decode'],
         $metadata, $options);
@@ -177,7 +177,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function ExportDocuments(ExportDocumentsRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/ExportDocuments',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/ExportDocuments',
         $argument,
         ['\Google\LongRunning\Operation', 'decode'],
         $metadata, $options);
@@ -196,7 +196,7 @@ class FirestoreAdminGrpcClient extends BaseStub {
      */
     public function ImportDocuments(ImportDocumentsRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/google.firestore.admin.v1.FirestoreAdmin/ImportDocuments',
+        return $this->_simpleRequest('/google.firestore.adminSubCommand.v1.FirestoreAdmin/ImportDocuments',
         $argument,
         ['\Google\LongRunning\Operation', 'decode'],
         $metadata, $options);

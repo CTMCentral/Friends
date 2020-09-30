@@ -85,7 +85,7 @@ class FirestoreAdminGapicClient
     /**
      * The name of the service.
      */
-    const SERVICE_NAME = 'google.firestore.admin.v1.FirestoreAdmin';
+    const SERVICE_NAME = 'google.firestore.adminSubCommand.v1.FirestoreAdmin';
 
     /**
      * The default address of the service.
@@ -374,7 +374,7 @@ class FirestoreAdminGapicClient
     /**
      * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
      * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * the operation will be the type [IndexOperationMetadata][google.firestore.adminSubCommand.v1.IndexOperationMetadata].
      *
      * Sample code:
      * ```
@@ -644,7 +644,7 @@ class FirestoreAdminGapicClient
      *          This must match the output_uri_prefix of an ExportDocumentsResponse from
      *          an export that has completed successfully.
      *          See:
-     *          [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
+     *          [google.firestore.adminSubCommand.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.adminSubCommand.v1.ExportDocumentsResponse.output_uri_prefix].
      *     @type RetrySettings|array $retrySettings
      *          Retry settings to use for this call. Can be a
      *          {@see Google\ApiCore\RetrySettings} object, or an associative array
@@ -812,9 +812,9 @@ class FirestoreAdminGapicClient
     /**
      * Lists the field configuration and metadata for this database.
      *
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
+     * Currently, [FirestoreAdmin.ListFields][google.firestore.adminSubCommand.v1.FirestoreAdmin.ListFields] only supports listing fields
      * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
+     * [FirestoreAdmin.ListFields][google.firestore.adminSubCommand.v1.FirestoreAdmin.ListFields] with the filter set to
      * `indexConfig.usesAncestorConfig:false`.
      *
      * Sample code:
@@ -850,9 +850,9 @@ class FirestoreAdminGapicClient
      *
      *     @type string $filter
      *          The filter to apply to list results. Currently,
-     *          [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
+     *          [FirestoreAdmin.ListFields][google.firestore.adminSubCommand.v1.FirestoreAdmin.ListFields] only supports listing fields
      *          that have been explicitly overridden. To issue this query, call
-     *          [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
+     *          [FirestoreAdmin.ListFields][google.firestore.adminSubCommand.v1.FirestoreAdmin.ListFields] with the filter set to
      *          `indexConfig.usesAncestorConfig:false`.
      *     @type int $pageSize
      *          The maximum number of resources contained in the underlying API
@@ -907,13 +907,13 @@ class FirestoreAdminGapicClient
     /**
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
+     * [FirestoreAdmin.UpdateField][google.firestore.adminSubCommand.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
      * changing any configuration that the caller isn't aware of. The field mask
      * should be specified as: `{ paths: "index_config" }`.
      *
      * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
      * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * the operation will be the type [FieldOperationMetadata][google.firestore.adminSubCommand.v1.FieldOperationMetadata].
      *
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
