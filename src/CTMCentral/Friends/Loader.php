@@ -5,6 +5,7 @@ namespace CTMCentral\Friends;
 use CTMCentral\Friends\commands\FriendCommand;
 use Google\Auth\CredentialsLoader;
 use pocketmine\plugin\PluginBase;
+use pocketmine\Server;
 
 class Loader extends PluginBase{
 
@@ -17,5 +18,7 @@ class Loader extends PluginBase{
 		$this->getServer()->getCommandMap()->register("friends", new FriendCommand($this, "friend", "Command used to show friends GUI", ["f"]));
 		(new Database())->init(CredentialsLoader::fromWellKnownFile());
 		$api = new FriendAPI();
+		$api->listOnlineFriends("provsalt");
+		Server::getInstance()->getNetwork()->getSessionManager()->add();
 	}
 }

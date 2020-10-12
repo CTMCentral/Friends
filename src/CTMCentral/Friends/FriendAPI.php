@@ -169,4 +169,20 @@ class FriendAPI {
 		}
 		return $db->collection("friends")->document($username)->snapshot()->get("requestlist");
 	}
+	public function listOnlineFriends(String $username) {
+		$db = (new Database())::getDataBase();
+		$queryfriendsname = $db->collection("friends")->document($username);
+		if (!$queryfriendsname->snapshot()->exists()) {
+			throw new UserNotFound();
+		}
+		$friends = $db->collection("friends")->document($username)->snapshot()->get("friendlist");
+		foreach ($friends as $friend) {
+			if (Server::getInstance()->getPlayerExact($friend) === null) {
+				if (($key = array_search($friend, $friends)) !== false) {
+					unset($friends[$key]);
+				}
+			}
+		}
+		var_dump($friend);
+	}
 }

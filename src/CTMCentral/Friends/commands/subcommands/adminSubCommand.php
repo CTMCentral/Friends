@@ -1,6 +1,6 @@
 <?php
 
-namespace CTMCentral\Friends\commands\subcommands
+namespace CTMCentral\Friends\commands\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
